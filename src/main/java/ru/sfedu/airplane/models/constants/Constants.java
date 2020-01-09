@@ -3,7 +3,8 @@ package ru.sfedu.airplane.models.constants;
 public class Constants {
 
     public static final String CU_KEY = "config";
-    public static final String DEFAULT_CONFIG_PATH = "src/main/resources/config.properties";
+    public static final String DEFAULT_CONFIG_PATH = "/config.properties";
+    public static final String FULL_PATH = "src/main/resources/config.properties";
 
 //    properties key
 

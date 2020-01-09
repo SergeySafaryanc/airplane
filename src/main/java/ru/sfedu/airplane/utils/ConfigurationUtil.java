@@ -2,13 +2,17 @@ package ru.sfedu.airplane.utils;
 
 
 import ru.sfedu.airplane.Main;
+import ru.sfedu.airplane.models.constants.Constants;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import static java.lang.System.getProperty;
 import static ru.sfedu.airplane.Main.CONFIG_PATH;
+import static ru.sfedu.airplane.models.constants.Constants.*;
 
 
 /**
@@ -42,8 +46,12 @@ public class ConfigurationUtil {
      * @throws IOException In case of the configuration file read failure
      */
     private static void loadConfiguration() throws IOException{
-//        InputStream in = DEFAULT_CONFIG_PATH.getClass().getResourceAsStream(DEFAULT_CONFIG_PATH);
-        FileInputStream in = new FileInputStream(CONFIG_PATH);
+        FileInputStream in;
+        try {
+            in = new FileInputStream(CONFIG_PATH);
+        } catch (FileNotFoundException e) {
+            in = new FileInputStream(FULL_PATH);
+        }
 
         try {
             configuration.load(in);
