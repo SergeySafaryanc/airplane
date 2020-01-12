@@ -8,7 +8,7 @@ import org.simpleframework.xml.Root;
 public class Pilot {
 
 	@CsvBindByPosition(position = 0)
-	public int pilotId;
+	public long id;
 	@CsvBindByPosition(position = 1)
 	public String firstName;
 	@CsvBindByPosition(position = 2)
@@ -23,18 +23,18 @@ public class Pilot {
  * Set the value of pilotId
  * @param newVar the new value of pilotId
  */
-	@Element(name = "PilotId")
-	public void setPilotId (int newVar) {
-	pilotId = newVar;
+	@Element(name = "Id")
+	public void setId (long newVar) {
+		id = newVar;
 	}
 
 /**
  * Get the value of pilotId
  * @return the value of pilotId
  */
-	@Element(name = "PilotId")
-	public int getPilotId () {
-	return pilotId;
+	@Element(name = "Id")
+	public long getId () {
+	return id;
 	}
 
 /**
@@ -96,7 +96,7 @@ public class Pilot {
 	@Override
 	public String toString() {
 		return "Pilot{" +
-				"pilotId=" + pilotId +
+				"id=" + id +
 				", firstName='" + firstName + '\'' +
 				", lastName='" + lastName + '\'' +
 				", typePilot='" + typePilot + '\'' +

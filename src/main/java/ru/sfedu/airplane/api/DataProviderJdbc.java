@@ -69,7 +69,7 @@ public class DataProviderJdbc implements IDataProvider {
      * @return
      */
     @Override
-    public Result getRecordById(int id, Class clazz) {
+    public Result getRecordById(long id, Class clazz) {
 
         switch (ClassesType.valueOf(clazz.getSimpleName().toUpperCase())){
             case PILOT:
@@ -99,7 +99,7 @@ public class DataProviderJdbc implements IDataProvider {
      * @return
      */
     @Override
-    public Result delRecordById(int id, Class clazz) {
+    public Result delRecordById(long id, Class clazz) {
         switch (ClassesType.valueOf(clazz.getSimpleName().toUpperCase())){
 
             case PILOT:
@@ -131,7 +131,7 @@ public class DataProviderJdbc implements IDataProvider {
      * @return
      */
     @Override
-    public <T> Result updRecordById(List<T> bean, int id, Class clazz) {
+    public <T> Result updRecordById(List<T> bean, long id, Class clazz) {
         switch (ClassesType.valueOf(clazz.getSimpleName().toUpperCase())){
 
             case AGRICULTURAL:
@@ -161,7 +161,7 @@ public class DataProviderJdbc implements IDataProvider {
      * @return
      */
     @Override
-    public Result checkPilot(int id, CheckPilot checkPilot) {
+    public Result checkPilot(long id, CheckPilot checkPilot) {
         try {
             switch (CheckPilot.valueOf(checkPilot.toString().toUpperCase())) {
                 case COUNT:
@@ -184,7 +184,7 @@ public class DataProviderJdbc implements IDataProvider {
      * @return
      */
     @Override
-    public Result checkAir(int id, TypePilot type, CheckAir checkAir) {
+    public Result checkAir(long id, TypePilot type, CheckAir checkAir) {
         try {
             switch (CheckAir.valueOf(checkAir.toString().toUpperCase())){
                 case COUNT:
@@ -205,13 +205,13 @@ public class DataProviderJdbc implements IDataProvider {
      * @param type
      * @return
      */
-    private Result checkAirListPilot(int id, TypePilot type) {
+    public Result checkAirListPilot(long id, TypePilot type) {
         try {
             ResultSet res = select(String.format(SELECT_PILOT_JOIN_FLY, type, id));
 
             if (res != null && res.next()) {
                 Pilot pilot = new Pilot();
-                pilot.setPilotId(res.getInt(PILOT_PILOT_ID));
+                pilot.setId(res.getLong(PILOT_PILOT_ID));
                 pilot.setFirstName(res.getString(PILOT_FIRST_NAME));
                 pilot.setLastName(res.getString(PILOT_LAST_NAME));
                 pilot.setTypePilot(res.getString(PILOT_TYPE_PILOT));
@@ -233,7 +233,7 @@ public class DataProviderJdbc implements IDataProvider {
      * @param type
      * @return
      */
-    private Result checkAirCount(int id, TypePilot type) {
+    public Result checkAirCount(long id, TypePilot type) {
         try {
             ResultSet res = select(String.format(SELECT_COUNT_FLY, id, type));
 
@@ -249,7 +249,7 @@ public class DataProviderJdbc implements IDataProvider {
      * @param id
      * @return
      */
-    private Result checkPilotListAir(int id) {
+    public Result checkPilotListAir(long id) {
         String airType = null;
         try {
             ResultSet res = select(String.format(SELECT_PILOT_BY_FLY, id));
@@ -262,7 +262,7 @@ public class DataProviderJdbc implements IDataProvider {
                     List<Agricultural> agriculturals = new ArrayList<>();
                     while (res.next()) {
                         Agricultural agricultural = new Agricultural();
-                        agricultural.setId(res.getInt(AGRICULTURAL_ID));
+                        agricultural.setId(res.getLong(AGRICULTURAL_ID));
                         agricultural.setModel(res.getString(AGRICULTURAL_MODEL));
                         agricultural.setProducer(res.getString(AGRICULTURAL_PRODUCER));
                         agricultural.setMaxDistance(res.getInt(AGRICULTURAL_MAX_DISTANCE));
@@ -277,7 +277,7 @@ public class DataProviderJdbc implements IDataProvider {
                     List<Bomber> bombers = new ArrayList<>();
                     while (res.next()) {
                         Bomber bomber = new Bomber();
-                        bomber.setId(res.getInt(BOMBER_ID));
+                        bomber.setId(res.getLong(BOMBER_ID));
                         bomber.setModel(res.getString(BOMBER_MODEL));
                         bomber.setProducer(res.getString(BOMBER_PRODUCER));
                         bomber.setMaxDistance(res.getInt(BOMBER_MAX_DISTANCE));
@@ -292,7 +292,7 @@ public class DataProviderJdbc implements IDataProvider {
                     List<FireAircraft> fireAircrafts = new ArrayList<>();
                     while (res.next()) {
                         FireAircraft aircraft = new FireAircraft();
-                        aircraft.setId(res.getInt(FIRE_AIRCRAFT_ID));
+                        aircraft.setId(res.getLong(FIRE_AIRCRAFT_ID));
                         aircraft.setModel(res.getString(FIRE_AIRCRAFT_MODEL));
                         aircraft.setProducer(res.getString(FIRE_AIRCRAFT_PRODUCER));
                         aircraft.setMaxDistance(res.getInt(FIRE_AIRCRAFT_MAX_DISTANCE));
@@ -307,7 +307,7 @@ public class DataProviderJdbc implements IDataProvider {
                     List<Fither> fithers = new ArrayList<>();
                     while (res.next()) {
                         Fither fither = new Fither();
-                        fither.setId(res.getInt(FITHER_ID));
+                        fither.setId(res.getLong(FITHER_ID));
                         fither.setModel(res.getString(FITHER_MODEL));
                         fither.setProducer(res.getString(FITHER_PRODUCER));
                         fither.setMaxDistance(res.getInt(FITHER_MAX_DISTANCE));
@@ -323,7 +323,7 @@ public class DataProviderJdbc implements IDataProvider {
                     List<Freight> freights = new ArrayList<>();
                     while (res.next()) {
                         Freight freight = new Freight();
-                        freight.setId(res.getInt(FREIGHT_ID));
+                        freight.setId(res.getLong(FREIGHT_ID));
                         freight.setModel(res.getString(FREIGHT_MODEL));
                         freight.setProducer(res.getString(FREIGHT_PRODUCER));
                         freight.setMaxDistance(res.getInt(FREIGHT_MAX_DISTANCE));
@@ -337,7 +337,7 @@ public class DataProviderJdbc implements IDataProvider {
                     List<Passenger> passengers = new ArrayList<>();
                     while (res.next()) {
                         Passenger passenger = new Passenger();
-                        passenger.setId(res.getInt(PASSENGER_ID));
+                        passenger.setId(res.getLong(PASSENGER_ID));
                         passenger.setModel(res.getString(PASSENGER_MODEL));
                         passenger.setProducer(res.getString(PASSENGER_PRODUCER));
                         passenger.setMaxDistance(res.getInt(PASSENGER_MAX_DISTANCE));
@@ -358,7 +358,7 @@ public class DataProviderJdbc implements IDataProvider {
      * @param id
      * @return
      */
-    private Result checkPilotCount(int id) {
+    public Result checkPilotCount(long id) {
         try {
             ResultSet res = select(String.format(SELECT_SUM_TIME_FLY, id));
 
@@ -375,7 +375,7 @@ public class DataProviderJdbc implements IDataProvider {
      * @param id
      * @return
      */
-    private Result checkPilotBool(int id){
+    public Result checkPilotBool(long id){
         try {
             ResultSet res = select(String.format(SELECT_ALL_PILOT, id));
 
@@ -398,17 +398,17 @@ public class DataProviderJdbc implements IDataProvider {
      * @param bean
      * @return
      */
-    private Result addFly(List<Fly> bean) {
+    public Result addFly(List<Fly> bean) {
         try {
             boolean exist = bean.stream().anyMatch(a ->
-                    (getRecordById(a.getFlyId(), Fly.class).getStatus() == Outcomes.FAIL)
-                    && (getRecordById(a.getPilotId(), Pilot.class).getStatus() == Outcomes.COMPLETE)
+                    (getRecordById(a.getId(), Fly.class).getStatus() == Outcomes.FAIL)
+                    && (getRecordById(a.getId(), Pilot.class).getStatus() == Outcomes.COMPLETE)
                     && (getRecordById(a.getAirId(), ClassesType.valueOf(a.getAirType().toUpperCase()).getClazz()).getStatus() == Outcomes.COMPLETE)
-                    && (getTypePilotById(a.getPilotId(), a.getAirType().toUpperCase()).getStatus() == Outcomes.COMPLETE)
+                    && (getTypePilotById(a.getId(), a.getAirType().toUpperCase()).getStatus() == Outcomes.COMPLETE)
             );
             if (exist) {
-                boolean d = bean.stream().anyMatch(a->(execute(String.format(INSERT_FLY, a.getFlyId(), a.getAirId(),
-                        a.getAirType(), a.getPilotId(), a.getTime())).getStatus() == Outcomes.COMPLETE));
+                boolean d = bean.stream().anyMatch(a->(execute(String.format(INSERT_FLY, a.getId(), a.getAirId(),
+                        a.getAirType(), a.getId(), a.getTime())).getStatus() == Outcomes.COMPLETE));
                 if (d) {
                     return new Result(Outcomes.COMPLETE);
                 }
@@ -423,7 +423,7 @@ public class DataProviderJdbc implements IDataProvider {
      * @param bean
      * @return
      */
-    private Result addAgricultural(List<Agricultural> bean) {
+    public Result addAgricultural(List<Agricultural> bean) {
         try {
             boolean exist = bean.stream().anyMatch(a -> (execute(String.format(INSERT_AGRICULTURAL, a.getId(), a.getModel(), a.getProducer(), a.getMaxDistance(), a.getMission(), a.getDisplacement(), a.getSprayWight())).getStatus() == Outcomes.COMPLETE));
             if (exist) return new Result(Outcomes.COMPLETE);
@@ -437,7 +437,7 @@ public class DataProviderJdbc implements IDataProvider {
      * @param bean
      * @return
      */
-    private Result addPassenger(List<Passenger> bean) {
+    public Result addPassenger(List<Passenger> bean) {
         try {
             boolean exist = bean.stream().anyMatch(a -> (execute(String.format(INSERT_PASSENGER, a.getId(), a.getModel(), a.getProducer(), a.getMaxDistance(), a.getTypeFlight(), a.getNumPassenger(), a.getService())).getStatus() == Outcomes.COMPLETE));
             if (exist) return new Result(Outcomes.COMPLETE);
@@ -451,7 +451,7 @@ public class DataProviderJdbc implements IDataProvider {
      * @param bean
      * @return
      */
-    private Result addFreight(List<Freight> bean) {
+    public Result addFreight(List<Freight> bean) {
         try {
             boolean exist = bean.stream().anyMatch(a -> (execute(String.format(INSERT_FREIGHT, a.getId(), a.getModel(),
                     a.getProducer(), a.getMaxDistance(), a.getTypeFlight(), a.getMaxWeight())).getStatus() == Outcomes.COMPLETE));
@@ -466,7 +466,7 @@ public class DataProviderJdbc implements IDataProvider {
      * @param bean
      * @return
      */
-    private Result addFither(List<Fither> bean) {
+    public Result addFither(List<Fither> bean) {
         try {
             boolean exist = bean.stream().anyMatch(a -> (execute(String.format(INSERT_FITHER, a.getId(), a.getModel(),
                     a.getProducer(), a.getMaxDistance(), a.getCountry(), a.getNumRocket(), a.getTypeRocket(), a.getGeneration())).getStatus() == Outcomes.COMPLETE));
@@ -477,7 +477,7 @@ public class DataProviderJdbc implements IDataProvider {
         return new Result(Outcomes.FAIL);
     }
 
-    private Result addFireAircraft(List<FireAircraft> bean) {
+    public Result addFireAircraft(List<FireAircraft> bean) {
         try {
             boolean exist = bean.stream().anyMatch(a -> (execute(String.format(INSERT_FIRE_AIRCRAFT, a.getId(),
                     a.getModel(), a.getProducer(), a.getMaxDistance(), a.getMission(), a.getDisplacement(), a.getSprayWight())).getStatus() == Outcomes.COMPLETE));
@@ -488,7 +488,7 @@ public class DataProviderJdbc implements IDataProvider {
         return new Result(Outcomes.FAIL);
     }
 
-    private Result addBomber(List<Bomber> bean) {
+    public Result addBomber(List<Bomber> bean) {
         try {
             boolean exist = bean.stream().anyMatch(a -> (execute(String.format(INSERT_BOMBER, a.getId(), a.getModel(),
                     a.getProducer(), a.getMaxDistance(), a.getCountry(), a.getNumBombs(), a.getTypeBombs())).getStatus() == Outcomes.COMPLETE));
@@ -499,10 +499,10 @@ public class DataProviderJdbc implements IDataProvider {
         return new Result(Outcomes.FAIL);
     }
 
-    private Result addPilot(List<Pilot> bean) {
+    public Result addPilot(List<Pilot> bean) {
         try {
             boolean exist = bean.stream().anyMatch(a -> (Arrays.stream(TypePilot.values()).anyMatch(typePilot -> typePilot.toString().equals(a.getTypePilot())))
-                    && (execute(String.format(INSERT_PILOT, a.getPilotId(), a.getFirstName(), a.getLastName(), a.getTypePilot(), a.isAdmission())).getStatus() == Outcomes.COMPLETE));
+                    && (execute(String.format(INSERT_PILOT, a.getId(), a.getFirstName(), a.getLastName(), a.getTypePilot(), a.isAdmission())).getStatus() == Outcomes.COMPLETE));
             if (exist) return new Result(Outcomes.COMPLETE);
         } catch (Exception e) {
             log.error(e);
@@ -512,12 +512,12 @@ public class DataProviderJdbc implements IDataProvider {
 
 //    getById
 
-    private Result getTypePilotById(int id, String getType) {
+    public Result getTypePilotById(long id, String getType) {
         try {
             ResultSet res = select(String.format(SELECT_COUNT_PILOT, id, getType.toUpperCase()));
 
             if (res != null && res.next()) {
-                int count = res.getRow();
+                long count = res.getRow();
 
                 if (count != 0) {
                     return new Result(Outcomes.COMPLETE);
@@ -529,7 +529,7 @@ public class DataProviderJdbc implements IDataProvider {
         return new Result(Outcomes.FAIL);
     }
 
-    private Result getFlyById(int id) {
+    public Result getFlyById(long id) {
         try {
             ResultSet res = select(String.format(SELECT_ALL_FLY, id));
 
@@ -537,10 +537,10 @@ public class DataProviderJdbc implements IDataProvider {
 
                 Fly fly = new Fly();
 
-                fly.setFlyId(res.getInt(FLY_FLY_ID));
-                fly.setAirId(Integer.parseInt(res.getString(FLY_AIR_ID)));
+                fly.setId(res.getLong(FLY_FLY_ID));
+                fly.setAirId(Long.parseLong(res.getString(FLY_AIR_ID)));
                 fly.setAirType(res.getString(FLY_AIR_TYPE));
-                fly.setPilotId(Integer.parseInt(res.getString(FLY_PILOT_ID)));
+                fly.setId(Long.parseLong(res.getString(FLY_PILOT_ID)));
                 fly.setTime(Integer.parseInt(res.getString(FLY_TIME)));
 
                 List<Fly> flies = new ArrayList<>();
@@ -554,7 +554,7 @@ public class DataProviderJdbc implements IDataProvider {
         return new Result(Outcomes.FAIL);
     }
 
-    private Result getPilotTypeById(int id) {
+    public Result getPilotTypeById(long id) {
         try {
             ResultSet res = select(String.format(SELECT_ALL_PILOT, id));
             if (res != null && res.next()) return new Result(Outcomes.COMPLETE, String.valueOf(res.getString(PILOT_TYPE_PILOT)));
@@ -565,7 +565,7 @@ public class DataProviderJdbc implements IDataProvider {
     }
 
 
-    private Result getPilotById(int pilotId) {
+    public Result getPilotById(long pilotId) {
         try {
             ResultSet res = select(String.format(SELECT_ALL_PILOT, pilotId));
 
@@ -573,7 +573,7 @@ public class DataProviderJdbc implements IDataProvider {
 
                 Pilot pilot = new Pilot();
 
-                pilot.setPilotId(res.getInt(PILOT_PILOT_ID));
+                pilot.setId(res.getLong(PILOT_PILOT_ID));
                 pilot.setFirstName(res.getString(PILOT_FIRST_NAME));
                 pilot.setLastName(res.getString(PILOT_LAST_NAME));
                 pilot.setTypePilot(res.getString(PILOT_TYPE_PILOT));
@@ -589,14 +589,14 @@ public class DataProviderJdbc implements IDataProvider {
         return new Result(Outcomes.FAIL);
     }
 
-    private Result getAgriculturalById(int id) {
+    public Result getAgriculturalById(long id) {
         try {
             ResultSet res = select(String.format(SELECT_ALL_AGRICULTURAL, id));
 
             if (res != null && res.next()) {
                 Agricultural agricultural = new Agricultural();
 
-                agricultural.setId(res.getInt(AGRICULTURAL_ID));
+                agricultural.setId(res.getLong(AGRICULTURAL_ID));
                 agricultural.setModel(res.getString(AGRICULTURAL_MODEL));
                 agricultural.setProducer(res.getString(AGRICULTURAL_PRODUCER));
                 agricultural.setMaxDistance(res.getInt(AGRICULTURAL_MAX_DISTANCE));
@@ -615,14 +615,14 @@ public class DataProviderJdbc implements IDataProvider {
         return new Result(Outcomes.FAIL);
     }
 
-    private Result getPassengerById(int id) {
+    public Result getPassengerById(long id) {
         try {
             ResultSet res = select(String.format(SELECT_ALL_PASSENGER, id));
 
             if (res != null && res.next()) {
                 Passenger passenger = new Passenger();
 
-                passenger.setId(res.getInt(PASSENGER_ID));
+                passenger.setId(res.getLong(PASSENGER_ID));
                 passenger.setModel(res.getString(PASSENGER_MODEL));
                 passenger.setProducer(res.getString(PASSENGER_PRODUCER));
                 passenger.setMaxDistance(res.getInt(PASSENGER_MAX_DISTANCE));
@@ -641,14 +641,14 @@ public class DataProviderJdbc implements IDataProvider {
         return new Result(Outcomes.FAIL);
     }
 
-    private Result getFreightById(int id) {
+    public Result getFreightById(long id) {
         try {
             ResultSet res = select(String.format(SELECT_ALL_FREIGHT, id));
 
             if (res != null && res.next()) {
                 Freight freight = new Freight();
 
-                freight.setId(res.getInt(FREIGHT_ID));
+                freight.setId(res.getLong(FREIGHT_ID));
                 freight.setModel(res.getString(FREIGHT_MODEL));
                 freight.setProducer(res.getString(FREIGHT_PRODUCER));
                 freight.setMaxDistance(res.getInt(FREIGHT_MAX_DISTANCE));
@@ -666,14 +666,14 @@ public class DataProviderJdbc implements IDataProvider {
         return new Result(Outcomes.FAIL);
     }
 
-    private Result getFitherById(int id) {
+    public Result getFitherById(long id) {
         try {
             ResultSet res = select(String.format(SELECT_ALL_FITHER, id));
 
             if (res != null && res.next()) {
                 Fither fither = new Fither();
 
-                fither.setId(res.getInt(FITHER_ID));
+                fither.setId(res.getLong(FITHER_ID));
                 fither.setModel(res.getString(FITHER_MODEL));
                 fither.setProducer(res.getString(FITHER_PRODUCER));
                 fither.setMaxDistance(res.getInt(FITHER_MAX_DISTANCE));
@@ -693,14 +693,14 @@ public class DataProviderJdbc implements IDataProvider {
         return new Result(Outcomes.FAIL);
     }
 
-    private Result getFireAircraftById(int id) {
+    public Result getFireAircraftById(long id) {
         try {
             ResultSet res = select(String.format(SELECT_ALL_FIRE_AIRCRAFT, id));
 
             if (res != null && res.next()) {
                 FireAircraft fireAircraft = new FireAircraft();
 
-                fireAircraft.setId(res.getInt(FIRE_AIRCRAFT_ID));
+                fireAircraft.setId(res.getLong(FIRE_AIRCRAFT_ID));
                 fireAircraft.setModel(res.getString(FIRE_AIRCRAFT_MODEL));
                 fireAircraft.setProducer(res.getString(FIRE_AIRCRAFT_PRODUCER));
                 fireAircraft.setMaxDistance(res.getInt(FIRE_AIRCRAFT_MAX_DISTANCE));
@@ -719,14 +719,14 @@ public class DataProviderJdbc implements IDataProvider {
         return new Result(Outcomes.FAIL);
     }
 
-    private Result getBomberById(int id) {
+    public Result getBomberById(long id) {
         try {
             ResultSet res = select(String.format(SELECT_ALL_BOMBER, id));
 
             if (res != null && res.next()) {
                 Bomber bomber = new Bomber();
 
-                bomber.setId(res.getInt(BOMBER_ID));
+                bomber.setId(res.getLong(BOMBER_ID));
                 bomber.setModel(res.getString(BOMBER_MODEL));
                 bomber.setProducer(res.getString(BOMBER_PRODUCER));
                 bomber.setMaxDistance(res.getInt(BOMBER_MAX_DISTANCE));
@@ -747,7 +747,7 @@ public class DataProviderJdbc implements IDataProvider {
 
 //    del methods
 
-    private Result delPilotById(int id) {
+    public Result delPilotById(long id) {
         try {
             boolean a = execute(String.format(DELETE_PILOT, id)).getStatus() == Outcomes.COMPLETE;
             boolean b = execute(String.format(UPDATE_FLY_PILOT, id)).getStatus() == Outcomes.COMPLETE;
@@ -758,7 +758,7 @@ public class DataProviderJdbc implements IDataProvider {
         return new Result(Outcomes.FAIL);
     }
 
-    private Result delFireAircraftById(int id) {
+    public Result delFireAircraftById(long id) {
         try {
             boolean a = execute(String.format(DELETE_FIREAIRCRAFT, id)).getStatus() == Outcomes.COMPLETE;
             boolean b = execute(String.format(UPDATE_FLY_AIR_FIREAIRCRAFT, id)).getStatus() == Outcomes.COMPLETE;
@@ -769,7 +769,7 @@ public class DataProviderJdbc implements IDataProvider {
         return new Result(Outcomes.FAIL);
     }
 
-    private Result delFlyById(int id) {
+    public Result delFlyById(long id) {
         try {
             boolean a = execute(String.format(DELETE_FLY, id)).getStatus() == Outcomes.COMPLETE;
             if (a) return new Result(Outcomes.COMPLETE);
@@ -779,7 +779,7 @@ public class DataProviderJdbc implements IDataProvider {
         return new Result(Outcomes.FAIL);
     }
 
-    private Result delFitherById(int id) {
+    public Result delFitherById(long id) {
         try {
             boolean a = execute(String.format(DELETE_FITHER, id)).getStatus() == Outcomes.COMPLETE;
             boolean b = execute(String.format(UPDATE_FLY_AIR_FITHER, id)).getStatus() == Outcomes.COMPLETE;
@@ -790,7 +790,7 @@ public class DataProviderJdbc implements IDataProvider {
         return new Result(Outcomes.FAIL);
     }
 
-    private Result delFreightById(int id) {
+    public Result delFreightById(long id) {
         try {
             boolean a = execute(String.format(DELETE_FREIGHT, id)).getStatus() == Outcomes.COMPLETE;
             boolean b = execute(String.format(UPDATE_FLY_AIR_FREIGHT, id)).getStatus() == Outcomes.COMPLETE;
@@ -801,7 +801,7 @@ public class DataProviderJdbc implements IDataProvider {
         return new Result(Outcomes.FAIL);
     }
 
-    private Result delPassengerById(int id) {
+    public Result delPassengerById(long id) {
         try {
             boolean a = execute(String.format(DELETE_PASSENGER, id)).getStatus() == Outcomes.COMPLETE;
             boolean b = execute(String.format(UPDATE_FLY_AIR_PASSENGER, id)).getStatus() == Outcomes.COMPLETE;
@@ -812,7 +812,7 @@ public class DataProviderJdbc implements IDataProvider {
         return new Result(Outcomes.FAIL);
     }
 
-    private Result delAgriculturalById(int id) {
+    public Result delAgriculturalById(long id) {
         try {
             boolean a = execute(String.format(DELETE_AGRICULTURAL, id)).getStatus() == Outcomes.COMPLETE;
             boolean b = execute(String.format(UPDATE_FLY_AIR_AGRICULTURAL, id)).getStatus() == Outcomes.COMPLETE;
@@ -823,7 +823,7 @@ public class DataProviderJdbc implements IDataProvider {
         return new Result(Outcomes.FAIL);
     }
 
-    private Result delBomberById(int id) {
+    public Result delBomberById(long id) {
         try {
             boolean a = execute(String.format(DELETE_BOMBER, id)).getStatus() == Outcomes.COMPLETE;
             boolean b = execute(String.format(UPDATE_FLY_AIR_BOMBER, id)).getStatus() == Outcomes.COMPLETE;
@@ -836,17 +836,17 @@ public class DataProviderJdbc implements IDataProvider {
 
 //    updById methods
 
-    private Result updFlyById(List<Fly> bean, int id) {
+    public Result updFlyById(List<Fly> bean, long id) {
         try {
             boolean exist = bean.stream().anyMatch(a ->
-                    (getRecordById(a.getFlyId(), Fly.class).getStatus() == Outcomes.COMPLETE)
-                            && (getRecordById(a.getPilotId(), Pilot.class).getStatus() == Outcomes.COMPLETE)
+                    (getRecordById(a.getId(), Fly.class).getStatus() == Outcomes.COMPLETE)
+                            && (getRecordById(a.getId(), Pilot.class).getStatus() == Outcomes.COMPLETE)
                             && (getRecordById(a.getAirId(), ClassesType.valueOf(a.getAirType().toUpperCase()).getClazz()).getStatus() == Outcomes.COMPLETE)
-                            && (getTypePilotById(a.getPilotId(), a.getAirType().toUpperCase()).getStatus() == Outcomes.COMPLETE)
+                            && (getTypePilotById(a.getId(), a.getAirType().toUpperCase()).getStatus() == Outcomes.COMPLETE)
             );
             if (exist) {
                 boolean d = bean.stream().anyMatch(a -> (execute(String.format(UPDATE_FLY_BY_ID, a.getAirId(),
-                        a.getAirType(), a.getPilotId(), a.getTime(), a.getFlyId())).getStatus() == Outcomes.COMPLETE));
+                        a.getAirType(), a.getId(), a.getTime(), a.getId())).getStatus() == Outcomes.COMPLETE));
                 if (d) {
                     return new Result(Outcomes.COMPLETE);
                 }
@@ -857,9 +857,9 @@ public class DataProviderJdbc implements IDataProvider {
         return new Result(Outcomes.FAIL);
     }
 
-//    private Generic updDependency()
+//    public Generic updDependency()
 
-    private Result updPilotById(List<Pilot> bean, int id) {
+    public Result updPilotById(List<Pilot> bean, long id) {
         String typePilot = "";
         try {
             ResultSet res = select(String.format(SELECT_PILOT, id));
@@ -884,7 +884,7 @@ public class DataProviderJdbc implements IDataProvider {
         return new Result(Outcomes.FAIL);
     }
 
-    private Result updPassengerById(List<Passenger> bean, int id) {
+    public Result updPassengerById(List<Passenger> bean, long id) {
         try {
             boolean exist = bean.stream().anyMatch(a -> (execute(String.format(UPDATE_PASSENGER, a.getModel(),
                     a.getProducer(), a.getMaxDistance(), a.getTypeFlight(), a.getNumPassenger(), a.getService(), a.getId())).getStatus() == Outcomes.COMPLETE));
@@ -895,7 +895,7 @@ public class DataProviderJdbc implements IDataProvider {
         return new Result(Outcomes.FAIL);
     }
 
-    private Result updFreightById(List<Freight> bean, int id) {
+    public Result updFreightById(List<Freight> bean, long id) {
         try {
             boolean exist = bean.stream().anyMatch(a -> (execute(String.format(UPDATE_FREIGHT, a.getModel(),
                     a.getProducer(), a.getMaxDistance(), a.getTypeFlight(), a.getMaxWeight(), a.getId())).getStatus() == Outcomes.COMPLETE));
@@ -906,7 +906,7 @@ public class DataProviderJdbc implements IDataProvider {
         return new Result(Outcomes.FAIL);
     }
 
-    private Result updFitherById(List<Fither> bean, int id) {
+    public Result updFitherById(List<Fither> bean, long id) {
         try {
             boolean exist = bean.stream().anyMatch(a -> (execute(String.format(UPDATE_FITHER, a.getModel(),
                     a.getProducer(), a.getMaxDistance(), a.getCountry(), a.getNumRocket(), a.getTypeRocket(), a.getGeneration(), a.getId())).getStatus() == Outcomes.COMPLETE));
@@ -917,7 +917,7 @@ public class DataProviderJdbc implements IDataProvider {
         return new Result(Outcomes.FAIL);
     }
 
-    private Result updFireAircraftById(List<FireAircraft> bean, int id) {
+    public Result updFireAircraftById(List<FireAircraft> bean, long id) {
         try {
             boolean exist = bean.stream().anyMatch(a -> (execute(String.format(UPDATE_FIRE_AIRCRAFT, a.getModel(),
                     a.getProducer(), a.getMaxDistance(), a.getMission(), a.getDisplacement(), a.getSprayWight(), a.getId())).getStatus() == Outcomes.COMPLETE));
@@ -928,7 +928,7 @@ public class DataProviderJdbc implements IDataProvider {
         return new Result(Outcomes.FAIL);
     }
 
-    private Result updBomberById(List<Bomber> bean, int id) {
+    public Result updBomberById(List<Bomber> bean, long id) {
         try {
             boolean exist = bean.stream().anyMatch(a ->(execute(String.format(UPDATE_BOMBER, a.getModel(),
                     a.getProducer(), a.getMaxDistance(), a.getCountry(), a.getNumBombs(), a.getTypeBombs(), a.getId())).getStatus() == Outcomes.COMPLETE));
@@ -939,7 +939,7 @@ public class DataProviderJdbc implements IDataProvider {
         return new Result(Outcomes.FAIL);
     }
 
-    private Result updAgriculturalById(List<Agricultural> bean, int id) {
+    public Result updAgriculturalById(List<Agricultural> bean, long id) {
         try {
             boolean exist = bean.stream().anyMatch(a ->(execute(String.format(UPDATE_AGRICULTURAL, a.getModel(),
                     a.getProducer(), a.getMaxDistance(), a.getMission(), a.getDisplacement(), a.getSprayWight(), a.getId())).getStatus() == Outcomes.COMPLETE));

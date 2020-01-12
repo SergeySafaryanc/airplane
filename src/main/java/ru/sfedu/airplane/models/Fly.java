@@ -8,34 +8,34 @@ import org.simpleframework.xml.Root;
 public class Fly {
 
     @CsvBindByPosition(position = 0)
-    private int flyId;
+    private long id;
     @CsvBindByPosition(position = 1)
-    private int airId;
+    private long airId;
     @CsvBindByPosition(position = 2)
     private String airType;
     @CsvBindByPosition(position = 3)
-    private int pilotId;
+    private long pilotId;
     @CsvBindByPosition(position = 4)
     private int time;
 
 
-    @Element(name = "flyId")
-    public int getFlyId() {
-        return flyId;
+    @Element(name = "id")
+    public long getId() {
+        return id;
     }
 
-    @Element(name = "flyId")
-    public void setFlyId(int flyId) {
-        this.flyId = flyId;
+    @Element(name = "id")
+    public void setId(long flyId) {
+        this.id = flyId;
     }
 
     @Element(name = "airId")
-    public int getAirId() {
+    public long getAirId() {
         return airId;
     }
 
     @Element(name = "airId")
-    public void setAirId(int airId) {
+    public void setAirId(long airId) {
         this.airId = airId;
     }
 
@@ -50,12 +50,12 @@ public class Fly {
     }
 
     @Element(name = "pilotId")
-    public int getPilotId() {
+    public long getPilotId() {
         return pilotId;
     }
 
     @Element(name = "pilotId")
-    public void setPilotId(int pilotId) {
+    public void setPilotId(long pilotId) {
         this.pilotId = pilotId;
     }
 
@@ -72,7 +72,7 @@ public class Fly {
     @Override
     public String toString() {
         return "Fly{" +
-                "flyId=" + flyId +
+                "id=" + id +
                 ", airId=" + airId +
                 ", airType='" + airType + '\'' +
                 ", pilotId=" + pilotId +

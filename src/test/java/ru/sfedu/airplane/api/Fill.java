@@ -131,7 +131,7 @@ public class Fill {
      * The Air id.
      */
 //    Fly
-    static int[] airId = {1, 1, 1, 1, 1, 1, 2, 2, 2, 3};
+    static long[] airId = {1, 1, 1, 1, 1, 1, 2, 2, 2, 3};
     /**
      * The Time fly.
      */
@@ -139,7 +139,7 @@ public class Fill {
     /**
      * The Pilot id.
      */
-    static int[] pilotId = {1, 2, 3, 4, 5, 6, 7, 6, 2, 1};
+    static long[] pilotId = {1, 2, 3, 4, 5, 6, 7, 6, 2, 1};
     /**
      * The Type pilot.
      */

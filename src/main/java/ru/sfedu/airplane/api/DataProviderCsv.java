@@ -19,6 +19,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static ru.sfedu.airplane.models.constants.Constants.*;
+import static ru.sfedu.airplane.models.constants.Outcomes.*;
 import static ru.sfedu.airplane.utils.ConfigurationUtil.getConfigurationEntry;
 import static ru.sfedu.airplane.models.constants.ClassesType.*;
 import static ru.sfedu.airplane.models.constants.Outcomes.FAIL;
@@ -63,7 +64,7 @@ public class DataProviderCsv implements IDataProvider {
             case FLY:
                 return addFly((List<Fly>) bean);
             default:
-                return null;
+                return new Result(FAIL);
         }
     }
 
@@ -73,7 +74,7 @@ public class DataProviderCsv implements IDataProvider {
      * @return
      */
     @Override
-    public Result getRecordById(int id, Class clazz) {
+    public Result getRecordById(long id, Class clazz) {
 
         switch (ClassesType.valueOf(clazz.getSimpleName().toUpperCase())) {
             case PILOT:
@@ -103,7 +104,7 @@ public class DataProviderCsv implements IDataProvider {
      * @return
      */
     @Override
-    public Result delRecordById(int id, Class clazz) {
+    public Result delRecordById(long id, Class clazz) {
         switch (ClassesType.valueOf(clazz.getSimpleName().toUpperCase())) {
 
             case PILOT:
@@ -123,7 +124,7 @@ public class DataProviderCsv implements IDataProvider {
             case FLY:
                 return delFlyById(id);
             default:
-                return null;
+                return new Result(FAIL);
         }
     }
 
@@ -135,7 +136,7 @@ public class DataProviderCsv implements IDataProvider {
      * @return
      */
     @Override
-    public <T> Result updRecordById(List<T> bean, int id, Class clazz) {
+    public <T> Result updRecordById(List<T> bean, long id, Class clazz) {
         switch (ClassesType.valueOf(clazz.getSimpleName().toUpperCase())) {
             case AGRICULTURAL:
                 return updAgriculturalById((List<Agricultural>) bean, id);
@@ -154,7 +155,7 @@ public class DataProviderCsv implements IDataProvider {
             case FLY:
                 return updFlyById((List<Fly>) bean, id);
             default:
-                return null;
+                return new Result(FAIL);
         }
     }
 
@@ -164,7 +165,7 @@ public class DataProviderCsv implements IDataProvider {
      * @return
      */
     @Override
-    public Result checkPilot(int id, CheckPilot checkPilot) {
+    public Result checkPilot(long id, CheckPilot checkPilot) {
         try {
             switch (CheckPilot.valueOf(checkPilot.toString().toUpperCase())) {
                 case COUNT:
@@ -187,7 +188,7 @@ public class DataProviderCsv implements IDataProvider {
      * @return
      */
     @Override
-    public Result checkAir(int id, TypePilot type, CheckAir checkAir) {
+    public Result checkAir(long id, TypePilot type, CheckAir checkAir) {
         try {
             switch (CheckAir.valueOf(checkAir.toString().toUpperCase())) {
                 case COUNT:
@@ -207,11 +208,11 @@ public class DataProviderCsv implements IDataProvider {
      * @param pilotId
      * @return
      */
-    private Result checkPilotCount(int pilotId) {
+    public Result checkPilotCount(long pilotId) {
         try {
             List<Fly> flies = read(Fly.class);
-            int count = flies.stream().filter(fly -> fly.getPilotId() == pilotId).mapToInt(Fly::getTime).sum();
-            return new Result(Outcomes.COMPLETE, (CHECK_PILOT_COUNT_ANSWER + count));
+            long count = flies.stream().filter(fly -> fly.getId() == pilotId).mapToInt(Fly::getTime).sum();
+            return new Result(COMPLETE, (CHECK_PILOT_COUNT_ANSWER + count));
         } catch (Exception e) {
             log.error(e);
         }
@@ -222,11 +223,11 @@ public class DataProviderCsv implements IDataProvider {
      * @param id
      * @return
      */
-    private Result checkPilotListAir(int id) {
+    public Result checkPilotListAir(long id) {
         List list = new ArrayList();
         try {
             List<Fly> flies = read(Fly.class);
-            flies.stream().filter(fly -> fly.getPilotId() == id).forEach(fly -> {
+            flies.stream().filter(fly -> fly.getId() == id).forEach(fly -> {
                 switch (ClassesType.valueOf(fly.getAirType().toUpperCase())) {
                     case AGRICULTURAL:
                         List<Agricultural> agriculturals = read(Agricultural.class);
@@ -254,7 +255,7 @@ public class DataProviderCsv implements IDataProvider {
                         break;
                 }
             });
-            return new Result(Outcomes.COMPLETE, list.toString());
+            return new Result(COMPLETE, list.toString());
         } catch (Exception e) {
             log.error(e);
         }
@@ -265,14 +266,14 @@ public class DataProviderCsv implements IDataProvider {
      * @param id
      * @return
      */
-    private Result checkPilotBool(int id) {
+    public Result checkPilotBool(long id) {
         try {
             List<Pilot> pilots = read(Pilot.class);
-            boolean adm = pilots.stream().filter(pilot -> pilot.getPilotId() == id).anyMatch(Pilot::isAdmission);
+            boolean adm = pilots.stream().filter(pilot -> pilot.getId() == id).anyMatch(Pilot::isAdmission);
             if (adm) {
-                return new Result(Outcomes.COMPLETE, CHECK_PILOT_TRUE);
+                return new Result(COMPLETE, CHECK_PILOT_TRUE);
             } else {
-                return new Result(Outcomes.COMPLETE, CHECK_PILOT_FALSE);
+                return new Result(COMPLETE, CHECK_PILOT_FALSE);
             }
         } catch (Exception e) {
             log.error(e);
@@ -285,11 +286,11 @@ public class DataProviderCsv implements IDataProvider {
      * @param type
      * @return
      */
-    private Result checkAirCount(int airId, TypePilot type) {
+    public Result checkAirCount(long airId, TypePilot type) {
         try {
             List<Fly> flies = read(Fly.class);
             long count = flies.stream().filter(fly -> fly.getAirId() == airId && fly.getAirType().equals(String.valueOf(type))).count();
-            return new Result(Outcomes.COMPLETE, (DEPARTURES + count));
+            return new Result(COMPLETE, (DEPARTURES + count));
         } catch (Exception e) {
             log.error(e);
         }
@@ -301,15 +302,15 @@ public class DataProviderCsv implements IDataProvider {
      * @param type
      * @return
      */
-    private Result checkAirListPilot(int id, TypePilot type) {
+    public Result checkAirListPilot(long id, TypePilot type) {
         try {
             List<Fly> flies = read(Fly.class);
             List<Pilot> pilots = read(Pilot.class);
             List list = new ArrayList();
             flies.stream().filter(fly -> fly.getAirId() == id && fly.getAirType().equals(String.valueOf(type))).forEach(fly -> {
-                list.add(pilots.stream().filter(pilot -> pilot.getPilotId() == fly.getPilotId()).collect(Collectors.toList()));
+                list.add(pilots.stream().filter(pilot -> pilot.getId() == fly.getId()).collect(Collectors.toList()));
             });
-            return new Result(Outcomes.COMPLETE, String.valueOf(list));
+            return new Result(COMPLETE, String.valueOf(list));
         } catch (Exception e) {
             log.error(e);
         }
@@ -325,11 +326,13 @@ public class DataProviderCsv implements IDataProvider {
     public Result addFly(List<Fly> bean) {
         try {
             boolean exist = bean.stream().anyMatch(a -> (
-                    (getRecordById(a.getFlyId(), Fly.class).getStatus() == FAIL)
-                            && (getRecordById(a.getPilotId(), Pilot.class).getStatus() == Outcomes.COMPLETE)
-                            && (getRecordById(a.getAirId(), ClassesType.valueOf(a.getAirType().toUpperCase()).getClazz()).getStatus() == Outcomes.COMPLETE)
-                            && (getTypePilotById(a.getPilotId(), a.getAirType().toUpperCase()).getStatus() == Outcomes.COMPLETE)
+                    (getRecordById(a.getId(), Fly.class).getStatus() == FAIL)
+                            && (getRecordById(a.getPilotId(), Pilot.class).getStatus() == COMPLETE)
+                            && (getRecordById(a.getAirId(), ClassesType.valueOf(a.getAirType().toUpperCase()).getClazz()).getStatus() == COMPLETE)
+                            && (getTypePilotById(a.getPilotId(), a.getAirType().toUpperCase()).getStatus() == COMPLETE)
             ));
+//            log.debug(bean.stream().anyMatch(a -> );
+            log.debug(exist);
             if (exist) return add(bean, getConfigurationEntry(FLY.getCsvKey()), true);
         } catch (NullPointerException | IOException e) {
             log.error(e);
@@ -341,7 +344,7 @@ public class DataProviderCsv implements IDataProvider {
      * @param bean
      * @return
      */
-    private Result addAgricultural(List<Agricultural> bean) {
+    public Result addAgricultural(List<Agricultural> bean) {
         try {
             boolean exist = bean.stream().anyMatch(a -> (getAgriculturalById(a.getId()).getStatus() == FAIL));
             if (exist) return add(bean, getConfigurationEntry(AGRICULTURAL.getCsvKey()), true);
@@ -355,7 +358,7 @@ public class DataProviderCsv implements IDataProvider {
      * @param bean
      * @return
      */
-    private Result addPassenger(List<Passenger> bean) {
+    public Result addPassenger(List<Passenger> bean) {
         try {
             boolean exist = bean.stream().anyMatch(a -> (getPassengerById(a.getId()).getStatus() == FAIL));
             if (exist) return add(bean, getConfigurationEntry(PASSENGER.getCsvKey()), true);
@@ -369,7 +372,7 @@ public class DataProviderCsv implements IDataProvider {
      * @param bean
      * @return
      */
-    private Result addFreight(List<Freight> bean) {
+    public Result addFreight(List<Freight> bean) {
         try {
             boolean exist = bean.stream().anyMatch(a -> (getFreightById(a.getId()).getStatus() == FAIL));
             if (exist) return add(bean, getConfigurationEntry(FREIGHT.getCsvKey()), true);
@@ -383,9 +386,9 @@ public class DataProviderCsv implements IDataProvider {
      * @param bean
      * @return
      */
-    private Result addPilot(List<Pilot> bean) {
+    public Result addPilot(List<Pilot> bean) {
         try {
-            boolean exist = bean.stream().anyMatch(a -> (getPilotById(a.getPilotId()).getStatus() == FAIL)
+            boolean exist = bean.stream().anyMatch(a -> (getPilotById(a.getId()).getStatus() == FAIL)
                     && Arrays.stream(TypePilot.values()).anyMatch(typePilot -> typePilot.toString().equals(a.getTypePilot())));
             if (exist) return add(bean, getConfigurationEntry(PILOT.getCsvKey()), true);
         } catch (NullPointerException | IOException e) {
@@ -398,9 +401,10 @@ public class DataProviderCsv implements IDataProvider {
      * @param bean
      * @return
      */
-    private Result addBomber(List<Bomber> bean) {
+    public Result addBomber(List<Bomber> bean) {
         try {
             boolean exist = bean.stream().anyMatch(a -> (getBomberById(a.getId()).getStatus() == FAIL));
+            log.debug(exist);
             if (exist) return add(bean, getConfigurationEntry(BOMBER.getCsvKey()), true);
         } catch (NullPointerException | IOException e) {
             log.error(e);
@@ -412,7 +416,7 @@ public class DataProviderCsv implements IDataProvider {
      * @param bean
      * @return
      */
-    private Result addFither(List<Fither> bean) {
+    public Result addFither(List<Fither> bean) {
         try {
             boolean exist = bean.stream().anyMatch(a -> (getFitherById(a.getId()).getStatus() == FAIL));
             if (exist) return add(bean, getConfigurationEntry(FITHER.getCsvKey()), true);
@@ -426,7 +430,7 @@ public class DataProviderCsv implements IDataProvider {
      * @param bean
      * @return
      */
-    private Result addFireAircraft(List<FireAircraft> bean) {
+    public Result addFireAircraft(List<FireAircraft> bean) {
         try {
             boolean exist = bean.stream().anyMatch(a -> (getFireAircraftById(a.getId()).getStatus() == FAIL));
             if (exist) return add(bean, getConfigurationEntry(FIREAIRCRAFT.getCsvKey()), true);
@@ -442,15 +446,15 @@ public class DataProviderCsv implements IDataProvider {
      * @param id
      * @return
      */
-    private Result getFlyById(int id) {
+    public Result getFlyById(long id) {
         try {
             List<Fly> list = read(Fly.class);
             assert list != null;
-            list.removeIf(l -> l.getFlyId() != id);
+            list.removeIf(l -> l.getId() != id);
             if (list.isEmpty()) {
                 return new Result(FAIL, IDP_READ_ERROR);
             } else {
-                return new Result<Fly>(Outcomes.COMPLETE, String.valueOf(list));
+                return new Result<Fly>(COMPLETE, String.valueOf(list));
             }
         } catch (Exception e) {
             log.error(e);
@@ -462,14 +466,14 @@ public class DataProviderCsv implements IDataProvider {
      * @param id
      * @return
      */
-    private Result getPilotById(int id) {
+    public Result getPilotById(long id) {
         try {
             List<Pilot> list = read(Pilot.class);
-            list.removeIf(l -> l.getPilotId() != id);
+            list.removeIf(l -> l.getId() != id);
             if (list.isEmpty()) {
                 return new Result(FAIL, IDP_READ_ERROR);
             } else {
-                return new Result<Pilot>(Outcomes.COMPLETE, list.toString());
+                return new Result<Pilot>(COMPLETE, list.toString());
             }
         } catch (Exception e) {
             log.error(e);
@@ -481,14 +485,14 @@ public class DataProviderCsv implements IDataProvider {
      * @param id
      * @return
      */
-    private Result getPassengerById(int id) {
+    public Result getPassengerById(long id) {
         try {
             List<Passenger> list = read(Passenger.class);
             list.removeIf(l -> l.getId() != id);
             if (list.isEmpty()) {
                 return new Result(FAIL, IDP_READ_ERROR);
             } else {
-                return new Result<Passenger>(Outcomes.COMPLETE, String.valueOf(list));
+                return new Result<Passenger>(COMPLETE, String.valueOf(list));
             }
         } catch (Exception e) {
             log.error(e);
@@ -500,14 +504,14 @@ public class DataProviderCsv implements IDataProvider {
      * @param id
      * @return
      */
-    private Result getFreightById(int id) {
+    public Result getFreightById(long id) {
         try {
             List<Freight> list = read(Freight.class);
             list.removeIf(l -> l.getId() != id);
             if (list.isEmpty()) {
                 return new Result(FAIL, IDP_READ_ERROR);
             } else {
-                return new Result<Freight>(Outcomes.COMPLETE, String.valueOf(list));
+                return new Result<Freight>(COMPLETE, String.valueOf(list));
             }
         } catch (Exception e) {
             log.error(e);
@@ -519,14 +523,14 @@ public class DataProviderCsv implements IDataProvider {
      * @param id
      * @return
      */
-    private Result getFireAircraftById(int id) {
+    public Result getFireAircraftById(long id) {
         try {
             List<FireAircraft> list = read(FireAircraft.class);
             list.removeIf(l -> l.getId() != id);
             if (list.isEmpty()) {
                 return new Result(FAIL, IDP_READ_ERROR);
             } else {
-                return new Result<FireAircraft>(Outcomes.COMPLETE, String.valueOf(list));
+                return new Result<FireAircraft>(COMPLETE, String.valueOf(list));
             }
         } catch (Exception e) {
             log.error(e);
@@ -538,14 +542,14 @@ public class DataProviderCsv implements IDataProvider {
      * @param id
      * @return
      */
-    private Result getFitherById(int id) {
+    public Result getFitherById(long id) {
         try {
             List<Fither> list = read(Fither.class);
             list.removeIf(l -> l.getId() != id);
             if (list.isEmpty()) {
                 return new Result(FAIL, IDP_READ_ERROR);
             } else {
-                return new Result<Fither>(Outcomes.COMPLETE, String.valueOf(list));
+                return new Result<Fither>(COMPLETE, String.valueOf(list));
             }
         } catch (Exception e) {
             log.error(e);
@@ -557,14 +561,14 @@ public class DataProviderCsv implements IDataProvider {
      * @param id
      * @return
      */
-    private Result getAgriculturalById(int id) {
+    public Result getAgriculturalById(long id) {
         try {
             List<Agricultural> list = read(Agricultural.class);
             list.removeIf(l -> l.getId() != id);
             if (list.isEmpty()) {
                 return new Result(FAIL, IDP_READ_ERROR);
             } else {
-                return new Result<Agricultural>(Outcomes.COMPLETE, String.valueOf(list));
+                return new Result<Agricultural>(COMPLETE, String.valueOf(list));
             }
         } catch (Exception e) {
             log.error(e);
@@ -576,14 +580,14 @@ public class DataProviderCsv implements IDataProvider {
      * @param id
      * @return
      */
-    private Result getBomberById(int id) {
+    public Result getBomberById(long id) {
         try {
             List<Bomber> list = read(Bomber.class);
             list.removeIf(l -> l.getId() != id);
             if (list.isEmpty()) {
                 return new Result(FAIL, IDP_READ_ERROR);
             } else {
-                return new Result<Bomber>(Outcomes.COMPLETE, String.valueOf(list));
+                return new Result<Bomber>(COMPLETE, String.valueOf(list));
             }
         } catch (Exception e) {
             log.error(e);
@@ -596,11 +600,11 @@ public class DataProviderCsv implements IDataProvider {
      * @param getType
      * @return
      */
-    private Result getTypePilotById(int id, String getType) {
+    public Result getTypePilotById(long id, String getType) {
         try {
             List<Pilot> pilots = read(Pilot.class);
-            boolean check = pilots.stream().anyMatch(pilot -> (pilot.getPilotId() == id) && (pilot.getTypePilot().equals(getType.toUpperCase())));
-            if (check) return new Result(Outcomes.COMPLETE);
+            boolean check = pilots.stream().anyMatch(pilot -> (pilot.getId() == id) && (pilot.getTypePilot().equals(getType.toUpperCase())));
+            if (check) return new Result(COMPLETE);
         } catch (Exception e) {
             log.error(e);
         }
@@ -614,14 +618,14 @@ public class DataProviderCsv implements IDataProvider {
      * @param id
      * @return
      */
-    private Result delDependency(Class clazz, int id) {
+    public Result delDependency(Class clazz, long id) {
         try {
             List<Fly> flies = read(Fly.class);
 
             if (clazz == Pilot.class) {
                 List<Pilot> pilots = read(Pilot.class);
-                flies.stream().filter(fly -> fly.getPilotId() == id).forEach(fly -> {
-                    pilots.stream().filter(pilot -> pilot.getPilotId() == id).findFirst().ifPresent(pilot -> {
+                flies.stream().filter(fly -> fly.getId() == id).forEach(fly -> {
+                    pilots.stream().filter(pilot -> pilot.getId() == id).findFirst().ifPresent(pilot -> {
                         fly.setPilotId(0);
                     });
                 });
@@ -631,7 +635,7 @@ public class DataProviderCsv implements IDataProvider {
 
             add(flies, getConfigurationEntry(FLY.getCsvKey()), false);
 
-            return new Result(Outcomes.COMPLETE);
+            return new Result(COMPLETE);
         } catch (Exception e) {
             log.error(e);
         }
@@ -642,13 +646,13 @@ public class DataProviderCsv implements IDataProvider {
      * @param id
      * @return
      */
-    private Result delPilotById(int id) {
+    public Result delPilotById(long id) {
         try {
             List<Pilot> list = read(Pilot.class);
             delDependency(Pilot.class, id);
-            list.removeIf(l -> l.getPilotId() == id);
+            list.removeIf(l -> l.getId() == id);
             add(list, getConfigurationEntry(PILOT.getCsvKey()), false);
-            return new Result(Outcomes.COMPLETE);
+            return new Result(COMPLETE);
         } catch (Exception e) {
             log.error(e);
         }
@@ -659,13 +663,13 @@ public class DataProviderCsv implements IDataProvider {
      * @param id
      * @return
      */
-    private Result delBomberById(int id) {
+    public Result delBomberById(long id) {
         try {
             List<Bomber> list = read(Bomber.class);
             list.removeIf(l -> l.getId() == id);
             delDependency(Bomber.class, id);
             add(list, getConfigurationEntry(BOMBER.getCsvKey()), false);
-            return new Result(Outcomes.COMPLETE);
+            return new Result(COMPLETE);
         } catch (Exception e) {
             log.error(e);
         }
@@ -676,13 +680,13 @@ public class DataProviderCsv implements IDataProvider {
      * @param id
      * @return
      */
-    private Result delAgriculturalById(int id) {
+    public Result delAgriculturalById(long id) {
         try {
             List<Agricultural> list = read(Agricultural.class);
             list.removeIf(l -> l.getId() == id);
             delDependency(Agricultural.class, id);
             add(list, getConfigurationEntry(AGRICULTURAL.getCsvKey()), false);
-            return new Result(Outcomes.COMPLETE);
+            return new Result(COMPLETE);
         } catch (Exception e) {
             log.error(e);
         }
@@ -693,13 +697,13 @@ public class DataProviderCsv implements IDataProvider {
      * @param id
      * @return
      */
-    private Result delPassengerById(int id) {
+    public Result delPassengerById(long id) {
         try {
             List<Passenger> list = read(Passenger.class);
             list.removeIf(l -> l.getId() == id);
             delDependency(Passenger.class, id);
             add(list, getConfigurationEntry(PASSENGER.getCsvKey()), false);
-            return new Result(Outcomes.COMPLETE);
+            return new Result(COMPLETE);
         } catch (Exception e) {
             log.error(e);
         }
@@ -710,13 +714,13 @@ public class DataProviderCsv implements IDataProvider {
      * @param id
      * @return
      */
-    private Result delFreightById(int id) {
+    public Result delFreightById(long id) {
         try {
             List<Freight> list = read(Freight.class);
             list.removeIf(l -> l.getId() == id);
             delDependency(Freight.class, id);
             add(list, getConfigurationEntry(FREIGHT.getCsvKey()), false);
-            return new Result(Outcomes.COMPLETE);
+            return new Result(COMPLETE);
         } catch (Exception e) {
             log.error(e);
         }
@@ -727,13 +731,13 @@ public class DataProviderCsv implements IDataProvider {
      * @param id
      * @return
      */
-    private Result delFitherById(int id) {
+    public Result delFitherById(long id) {
         try {
             List<Fither> list = read(Fither.class);
             list.removeIf(l -> l.getId() == id);
             delDependency(Fither.class, id);
             add(list, getConfigurationEntry(FITHER.getCsvKey()), false);
-            return new Result(Outcomes.COMPLETE);
+            return new Result(COMPLETE);
         } catch (Exception e) {
             log.error(e);
         }
@@ -744,13 +748,13 @@ public class DataProviderCsv implements IDataProvider {
      * @param id
      * @return
      */
-    private Result delFireAircraftById(int id) {
+    public Result delFireAircraftById(long id) {
         try {
             List<FireAircraft> list = read(FireAircraft.class);
             list.removeIf(l -> l.getId() == id);
             delDependency(FireAircraft.class, id);
             add(list, getConfigurationEntry(FIREAIRCRAFT.getCsvKey()), false);
-            return new Result(Outcomes.COMPLETE);
+            return new Result(COMPLETE);
         } catch (Exception e) {
             log.error(e);
         }
@@ -761,12 +765,12 @@ public class DataProviderCsv implements IDataProvider {
      * @param id
      * @return
      */
-    private Result delFlyById(int id) {
+    public Result delFlyById(long id) {
         try {
             List<Fly> list = read(Fly.class);
-            list.removeIf(l -> (l.getFlyId() == id));
+            list.removeIf(l -> (l.getId() == id));
             add(list, getConfigurationEntry(FLY.getCsvKey()), false);
-            return new Result(Outcomes.COMPLETE);
+            return new Result(COMPLETE);
         } catch (IOException e) {
             log.error(e);
         }
@@ -780,15 +784,15 @@ public class DataProviderCsv implements IDataProvider {
      * @param id
      * @return
      */
-    private Result updDependency(Class clazz, int id) {
+    public Result updDependency(Class clazz, long id) {
         try {
             List<Fly> flies = read(Fly.class);
 
             if (clazz == Pilot.class) {
 
                 List<Pilot> pilots = read(Pilot.class);
-                flies.stream().filter(fly -> fly.getPilotId() == id).forEach(fly -> {
-                    pilots.stream().filter(pilot -> pilot.getPilotId() == id).findFirst().ifPresent(pilot -> {
+                flies.stream().filter(fly -> fly.getId() == id).forEach(fly -> {
+                    pilots.stream().filter(pilot -> pilot.getId() == id).findFirst().ifPresent(pilot -> {
                         if (ClassesType.valueOf(pilot.getTypePilot().toUpperCase()) != ClassesType.valueOf(fly.getAirType().toUpperCase())) {
                             fly.setPilotId(0);
                         } else {
@@ -802,7 +806,7 @@ public class DataProviderCsv implements IDataProvider {
 
             add(flies, getConfigurationEntry(FLY.getCsvKey()), false);
 
-            return new Result(Outcomes.COMPLETE);
+            return new Result(COMPLETE);
         } catch (Exception e) {
             log.error(e);
         }
@@ -814,16 +818,16 @@ public class DataProviderCsv implements IDataProvider {
      * @param id
      * @return
      */
-    private Result updPilotById(List<Pilot> bean, int id) {
+    public Result updPilotById(List<Pilot> bean, long id) {
         try {
             List<Pilot> list = read(Pilot.class);
 
-            list.removeIf(a -> a.getPilotId() == id);
+            list.removeIf(a -> a.getId() == id);
             list.addAll(bean);
 
             add(list, getConfigurationEntry(PILOT.getCsvKey()), false);
             updDependency(Pilot.class, id);
-            return new Result(Outcomes.COMPLETE);
+            return new Result(COMPLETE);
         } catch (Exception e) {
             log.error(e);
         }
@@ -835,12 +839,12 @@ public class DataProviderCsv implements IDataProvider {
      * @param id
      * @return
      */
-    private Result updAgriculturalById(List<Agricultural> bean, int id) {
+    public Result updAgriculturalById(List<Agricultural> bean, long id) {
         try {
             List<Agricultural> list = read(Agricultural.class);
             list.removeIf(a -> a.getId() == id);
             add(list, getConfigurationEntry(AGRICULTURAL.getCsvKey()), false);
-            if (addAgricultural(bean).getStatus() == Outcomes.COMPLETE) return new Result(Outcomes.COMPLETE);
+            if (addAgricultural(bean).getStatus() == COMPLETE) return new Result(COMPLETE);
         } catch (Exception e) {
             log.error(e);
         }
@@ -852,12 +856,12 @@ public class DataProviderCsv implements IDataProvider {
      * @param id
      * @return
      */
-    private Result updBomberById(List<Bomber> bean, int id) {
+    public Result updBomberById(List<Bomber> bean, long id) {
         try {
             List<Bomber> list = read(Bomber.class);
             list.removeIf(a -> a.getId() == id);
             add(list, getConfigurationEntry(BOMBER.getCsvKey()), false);
-            if (addBomber(bean).getStatus() == Outcomes.COMPLETE) return new Result(Outcomes.COMPLETE);
+            if (addBomber(bean).getStatus() == COMPLETE) return new Result(COMPLETE);
         } catch (Exception e) {
             log.error(e);
         }
@@ -869,12 +873,12 @@ public class DataProviderCsv implements IDataProvider {
      * @param id
      * @return
      */
-    private Result updFitherById(List<Fither> bean, int id) {
+    public Result updFitherById(List<Fither> bean, long id) {
         try {
             List<Fither> list = read(Fither.class);
             list.removeIf(a -> a.getId() == id);
             add(list, getConfigurationEntry(FITHER.getCsvKey()), false);
-            if (addFither(bean).getStatus() == Outcomes.COMPLETE) return new Result(Outcomes.COMPLETE);
+            if (addFither(bean).getStatus() == COMPLETE) return new Result(COMPLETE);
         } catch (Exception e) {
             log.error(e);
         }
@@ -886,12 +890,12 @@ public class DataProviderCsv implements IDataProvider {
      * @param id
      * @return
      */
-    private Result updFreightById(List<Freight> bean, int id) {
+    public Result updFreightById(List<Freight> bean, long id) {
         try {
             List<Freight> list = read(Freight.class);
             list.removeIf(a -> a.getId() == id);
             add(list, getConfigurationEntry(FREIGHT.getCsvKey()), false);
-            if (addFreight(bean).getStatus() == Outcomes.COMPLETE) return new Result(Outcomes.COMPLETE);
+            if (addFreight(bean).getStatus() == COMPLETE) return new Result(COMPLETE);
         } catch (Exception e) {
             log.error(e);
         }
@@ -903,12 +907,12 @@ public class DataProviderCsv implements IDataProvider {
      * @param id
      * @return
      */
-    private Result updPassengerById(List<Passenger> bean, int id) {
+    public Result updPassengerById(List<Passenger> bean, long id) {
         try {
             List<Passenger> list = read(Passenger.class);
             list.removeIf(a -> a.getId() == id);
             add(list, getConfigurationEntry(PASSENGER.getCsvKey()), false);
-            if (addPassenger(bean).getStatus() == Outcomes.COMPLETE) return new Result(Outcomes.COMPLETE);
+            if (addPassenger(bean).getStatus() == COMPLETE) return new Result(COMPLETE);
         } catch (Exception e) {
             log.error(e);
         }
@@ -920,12 +924,12 @@ public class DataProviderCsv implements IDataProvider {
      * @param id
      * @return
      */
-    private Result updFireAircraftById(List<FireAircraft> bean, int id) {
+    public Result updFireAircraftById(List<FireAircraft> bean, long id) {
         try {
             List<FireAircraft> list = read(FireAircraft.class);
             list.removeIf(a -> a.getId() == id);
             add(list, getConfigurationEntry(FIREAIRCRAFT.getCsvKey()), false);
-            if (addFireAircraft(bean).getStatus() == Outcomes.COMPLETE) return new Result(Outcomes.COMPLETE);
+            if (addFireAircraft(bean).getStatus() == COMPLETE) return new Result(COMPLETE);
         } catch (Exception e) {
             log.error(e);
         }
@@ -937,12 +941,12 @@ public class DataProviderCsv implements IDataProvider {
      * @param id
      * @return
      */
-    private Result updFlyById(List<Fly> bean, int id) {
+    public Result updFlyById(List<Fly> bean, long id) {
         try {
             List<Fly> list = read(Fly.class);
-            list.removeIf(a -> a.getFlyId() == id);
+            list.removeIf(a -> a.getId() == id);
             add(list, getConfigurationEntry(FLY.getCsvKey()), false);
-            if (addFly(bean).getStatus() == Outcomes.COMPLETE) return new Result(Outcomes.COMPLETE);
+            if (addFly(bean).getStatus() == COMPLETE) return new Result(COMPLETE);
         } catch (Exception e) {
             log.error(e);
         }
@@ -985,7 +989,7 @@ public class DataProviderCsv implements IDataProvider {
             beanToCsv.write(bean);
             writer.close();
 
-            return new Result(Outcomes.COMPLETE, Constants.IDP_COMPLETE);
+            return new Result(COMPLETE, Constants.IDP_COMPLETE);
         } catch (IOException | CsvRequiredFieldEmptyException | CsvDataTypeMismatchException e) {
             log.error(e);
         }

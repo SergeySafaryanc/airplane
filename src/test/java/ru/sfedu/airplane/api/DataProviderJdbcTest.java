@@ -27,7 +27,7 @@ public class DataProviderJdbcTest {
     public void addRecord() {
         for (int i=1; i<=10; i++) {
             Pilot pilot = new Pilot();
-            pilot.setPilotId(i);
+            pilot.setId(i);
             pilot.setFirstName(firstName[i-1]);
             pilot.setLastName(lastName[i-1]);
             pilot.setTypePilot(type[i-1]);
@@ -116,7 +116,7 @@ public class DataProviderJdbcTest {
         }
         for (int i=1; i<=10; i++) {
             Fly fly = new Fly();
-            fly.setFlyId(i);
+            fly.setId(i);
             fly.setTime(timeFly[i-1]);
             fly.setPilotId(pilotId[i-1]);
             fly.setAirType(typePilot[i-1]);

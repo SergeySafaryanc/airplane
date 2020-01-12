@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ru.sfedu.airplane.api.Fill.*;
+import static ru.sfedu.airplane.models.constants.Outcomes.*;
 
 
 public class DataProviderXmlTest {
@@ -27,14 +28,14 @@ public class DataProviderXmlTest {
     public void addRecord() {
         for (int i=1; i<=10; i++) {
             Pilot pilot = new Pilot();
-            pilot.setPilotId(i);
+            pilot.setId(i);
             pilot.setFirstName(firstName[i-1]);
             pilot.setLastName(lastName[i-1]);
             pilot.setTypePilot(type[i-1]);
             pilot.setAdmission(true);
             List<Pilot> pilots = new ArrayList<>();
             pilots.add(pilot);
-            Assert.assertEquals(xml.addRecord(pilots, Pilot.class).getStatus(), Outcomes.COMPLETE);
+            Assert.assertEquals(xml.addRecord(pilots, Pilot.class).getStatus(), COMPLETE);
         }
         for (int i=1; i<=8; i++) {
             Bomber bomber = new Bomber();
@@ -47,7 +48,7 @@ public class DataProviderXmlTest {
             bomber.setTypeBombs(typeBomb[i-1]);
             List<Bomber> bombers = new ArrayList<>();
             bombers.add(bomber);
-            Assert.assertEquals(xml.addRecord(bombers, Bomber.class).getStatus(), Outcomes.COMPLETE);
+            Assert.assertEquals(xml.addRecord(bombers, Bomber.class).getStatus(), COMPLETE);
         }
         for (int i=1; i<=7; i++) {
             Fither fither = new Fither();
@@ -61,7 +62,7 @@ public class DataProviderXmlTest {
             fither.setGeneration(4);
             List<Fither> fithers = new ArrayList<>();
             fithers.add(fither);
-            Assert.assertEquals(xml.addRecord(fithers, Fither.class).getStatus(), Outcomes.COMPLETE);
+            Assert.assertEquals(xml.addRecord(fithers, Fither.class).getStatus(), COMPLETE);
         }
         for (int i=1; i<=2; i++) {
             Agricultural agricultural = new Agricultural();
@@ -74,7 +75,7 @@ public class DataProviderXmlTest {
             agricultural.setDisplacement(disp[i-1]);
             List<Agricultural> agriculturals = new ArrayList<>();
             agriculturals.add(agricultural);
-            Assert.assertEquals(xml.addRecord(agriculturals, Agricultural.class).getStatus(), Outcomes.COMPLETE);
+            Assert.assertEquals(xml.addRecord(agriculturals, Agricultural.class).getStatus(), COMPLETE);
         }
         for (int i=1; i<=2; i++) {
             FireAircraft aircraft = new FireAircraft();
@@ -87,7 +88,7 @@ public class DataProviderXmlTest {
             aircraft.setDisplacement(disp[i-1]);
             List<FireAircraft> fireAircrafts = new ArrayList<>();
             fireAircrafts.add(aircraft);
-            Assert.assertEquals(xml.addRecord(fireAircrafts, FireAircraft.class).getStatus(), Outcomes.COMPLETE);
+            Assert.assertEquals(xml.addRecord(fireAircrafts, FireAircraft.class).getStatus(), COMPLETE);
         }
         for (int i=1; i<=8; i++) {
             Freight freight = new Freight();
@@ -99,7 +100,7 @@ public class DataProviderXmlTest {
             freight.setMaxWeight(maxW[i-1]);
             List<Freight> freights = new ArrayList<>();
             freights.add(freight);
-            Assert.assertEquals(xml.addRecord(freights, Freight.class).getStatus(), Outcomes.COMPLETE);
+            Assert.assertEquals(xml.addRecord(freights, Freight.class).getStatus(), COMPLETE);
         }
         for (int i=1; i<=4; i++) {
             Passenger passenger = new Passenger();
@@ -112,53 +113,53 @@ public class DataProviderXmlTest {
             passenger.setService(serv[i-1]);
             List<Passenger> freights = new ArrayList<>();
             freights.add(passenger);
-            Assert.assertEquals(xml.addRecord(freights, Passenger.class).getStatus(), Outcomes.COMPLETE);
+            Assert.assertEquals(xml.addRecord(freights, Passenger.class).getStatus(), COMPLETE);
         }
         for (int i=1; i<=10; i++) {
             Fly fly = new Fly();
-            fly.setFlyId(i);
+            fly.setId(i);
             fly.setTime(timeFly[i-1]);
             fly.setPilotId(pilotId[i-1]);
             fly.setAirType(typePilot[i-1]);
             fly.setAirId(airId[i-1]);
             List<Fly> flies = new ArrayList<>();
             flies.add(fly);
-            Assert.assertEquals(xml.addRecord(flies, Fly.class).getStatus(), Outcomes.COMPLETE);
+            Assert.assertEquals(xml.addRecord(flies, Fly.class).getStatus(), COMPLETE);
         }
     }
 
     @Test
     public void getRecordById() {
         for (int i=1; i<=10; i++) {
-            Assert.assertEquals(xml.getRecordById(i, Fly.class).getStatus(), Outcomes.COMPLETE);
+            Assert.assertEquals(xml.getRecordById(i, Fly.class).getStatus(), COMPLETE);
             System.out.println(xml.getRecordById(i, Fly.class).getAnswer());
         }
         for (int i=1; i<=10; i++) {
-            Assert.assertEquals(xml.getRecordById(i, Pilot.class).getStatus(), Outcomes.COMPLETE);
+            Assert.assertEquals(xml.getRecordById(i, Pilot.class).getStatus(), COMPLETE);
             System.out.println(xml.getRecordById(i, Pilot.class).getAnswer());
         }
         for (int i=1; i<=8; i++) {
-            Assert.assertEquals(xml.getRecordById(i, Bomber.class).getStatus(), Outcomes.COMPLETE);
+            Assert.assertEquals(xml.getRecordById(i, Bomber.class).getStatus(), COMPLETE);
             System.out.println(xml.getRecordById(i, Bomber.class).getAnswer());
         }
         for (int i=1; i<=7; i++) {
-            Assert.assertEquals(xml.getRecordById(i, Fither.class).getStatus(), Outcomes.COMPLETE);
+            Assert.assertEquals(xml.getRecordById(i, Fither.class).getStatus(), COMPLETE);
             System.out.println(xml.getRecordById(i, Fither.class).getAnswer());
         }
         for (int i=1; i<=2; i++) {
-            Assert.assertEquals(xml.getRecordById(i, Agricultural.class).getStatus(), Outcomes.COMPLETE);
+            Assert.assertEquals(xml.getRecordById(i, Agricultural.class).getStatus(), COMPLETE);
             System.out.println(xml.getRecordById(i, Agricultural.class).getAnswer());
         }
         for (int i=1; i<=2; i++) {
-            Assert.assertEquals(xml.getRecordById(i, FireAircraft.class).getStatus(), Outcomes.COMPLETE);
+            Assert.assertEquals(xml.getRecordById(i, FireAircraft.class).getStatus(), COMPLETE);
             System.out.println(xml.getRecordById(i, FireAircraft.class).getAnswer());
         }
         for (int i=1; i<=8; i++) {
-            Assert.assertEquals(xml.getRecordById(i, Freight.class).getStatus(), Outcomes.COMPLETE);
+            Assert.assertEquals(xml.getRecordById(i, Freight.class).getStatus(), COMPLETE);
             System.out.println(xml.getRecordById(i, Freight.class).getAnswer());
         }
         for (int i=1; i<=4; i++) {
-            Assert.assertEquals(xml.getRecordById(i, Passenger.class).getStatus(), Outcomes.COMPLETE);
+            Assert.assertEquals(xml.getRecordById(i, Passenger.class).getStatus(), COMPLETE);
             System.out.println(xml.getRecordById(i, Passenger.class).getAnswer());
         }
     }
@@ -166,28 +167,28 @@ public class DataProviderXmlTest {
     @After
     public void delRecordById() {
         for (int i=1; i<=10; i++) {
-            Assert.assertEquals(xml.delRecordById(i, Fly.class).getStatus(), Outcomes.COMPLETE);
+            Assert.assertEquals(xml.delRecordById(i, Fly.class).getStatus(), COMPLETE);
         }
         for (int i=1; i<=10; i++) {
-            Assert.assertEquals(xml.delRecordById(i, Pilot.class).getStatus(), Outcomes.COMPLETE);
+            Assert.assertEquals(xml.delRecordById(i, Pilot.class).getStatus(), COMPLETE);
         }
         for (int i=1; i<=8; i++) {
-            Assert.assertEquals(xml.delRecordById(i, Bomber.class).getStatus(), Outcomes.COMPLETE);
+            Assert.assertEquals(xml.delRecordById(i, Bomber.class).getStatus(), COMPLETE);
         }
         for (int i=1; i<=7; i++) {
-            Assert.assertEquals(xml.delRecordById(i, Fither.class).getStatus(), Outcomes.COMPLETE);
+            Assert.assertEquals(xml.delRecordById(i, Fither.class).getStatus(), COMPLETE);
         }
         for (int i=1; i<=2; i++) {
-            Assert.assertEquals(xml.delRecordById(i, Agricultural.class).getStatus(), Outcomes.COMPLETE);
+            Assert.assertEquals(xml.delRecordById(i, Agricultural.class).getStatus(), COMPLETE);
         }
         for (int i=1; i<=2; i++) {
-            Assert.assertEquals(xml.delRecordById(i, FireAircraft.class).getStatus(), Outcomes.COMPLETE);
+            Assert.assertEquals(xml.delRecordById(i, FireAircraft.class).getStatus(), COMPLETE);
         }
         for (int i=1; i<=8; i++) {
-            Assert.assertEquals(xml.delRecordById(i, Freight.class).getStatus(), Outcomes.COMPLETE);
+            Assert.assertEquals(xml.delRecordById(i, Freight.class).getStatus(), COMPLETE);
         }
         for (int i=1; i<=4; i++) {
-            Assert.assertEquals(xml.delRecordById(i, Passenger.class).getStatus(), Outcomes.COMPLETE);
+            Assert.assertEquals(xml.delRecordById(i, Passenger.class).getStatus(), COMPLETE);
         }
     }
 
@@ -198,19 +199,19 @@ public class DataProviderXmlTest {
 
     @Test
     public void checkPilot() {
-        Assert.assertEquals(xml.checkPilot(1, CheckPilot.COUNT).getStatus(), Outcomes.COMPLETE);
+        Assert.assertEquals(xml.checkPilot(1, CheckPilot.COUNT).getStatus(), COMPLETE);
         System.out.println(xml.checkPilot(1, CheckPilot.COUNT).getAnswer());
-        Assert.assertEquals(xml.checkPilot(1, CheckPilot.LIST).getStatus(), Outcomes.COMPLETE);
+        Assert.assertEquals(xml.checkPilot(1, CheckPilot.LIST).getStatus(), COMPLETE);
         System.out.println(xml.checkPilot(1, CheckPilot.LIST).getAnswer());
-        Assert.assertEquals(xml.checkPilot(1, CheckPilot.CHECK).getStatus(), Outcomes.COMPLETE);
+        Assert.assertEquals(xml.checkPilot(1, CheckPilot.CHECK).getStatus(), COMPLETE);
         System.out.println(xml.checkPilot(1, CheckPilot.CHECK).getAnswer());
     }
 
     @Test
     public void checkAir() {
-        Assert.assertEquals(xml.checkAir(1, TypePilot.BOMBER, CheckAir.COUNT).getStatus(), Outcomes.COMPLETE);
+        Assert.assertEquals(xml.checkAir(1, TypePilot.BOMBER, CheckAir.COUNT).getStatus(), COMPLETE);
         System.out.println(xml.checkAir(1, TypePilot.BOMBER, CheckAir.COUNT).getAnswer());
-        Assert.assertEquals(xml.checkAir(1, TypePilot.BOMBER, CheckAir.PILOT).getStatus(), Outcomes.COMPLETE);
+        Assert.assertEquals(xml.checkAir(1, TypePilot.BOMBER, CheckAir.PILOT).getStatus(), COMPLETE);
         System.out.println(xml.checkAir(1, TypePilot.BOMBER, CheckAir.PILOT).getAnswer());
     }
 }

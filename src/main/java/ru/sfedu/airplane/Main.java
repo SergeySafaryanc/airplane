@@ -36,15 +36,20 @@ public class Main {
      * @param args the input arguments
      */
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        String[] str = scanner.nextLine().toUpperCase().split(Constants.SPLIT, 3);
+        try {
 
-        String ds = str[0];
-        String op = str[1];
-        String cs = str[2];
+            Scanner scanner = new Scanner(System.in);
+            String[] str = scanner.nextLine().toUpperCase().split(Constants.SPLIT, 3);
 
-        IDataProvider dataProvider = defineDataSource(ds);
-        System.out.println(getAnswer(dataProvider, op, cs));
+            String ds = str[0];
+            String op = str[1];
+            String cs = str[2];
+
+            IDataProvider dataProvider = defineDataSource(ds);
+            System.out.println(getAnswer(dataProvider, op, cs));
+        } catch (Exception e) {
+            logger.error(e);
+        }
     }
 
     private static IDataProvider defineDataSource(String key){
@@ -88,37 +93,37 @@ public class Main {
                 case ADDPASSENGER:
                     return passenger(dataProvider, str, ADD);
                 case GETFLY:
-                    return dataProvider.getRecordById(Integer.parseInt(str), Fly.class).getAnswer();
+                    return dataProvider.getFlyById(Integer.parseInt(str)).getAnswer();
                 case GETPILOT:
-                    return dataProvider.getRecordById(Integer.parseInt(str), Pilot.class).getAnswer();
+                    return dataProvider.getPilotById(Integer.parseInt(str)).getAnswer();
                 case GETBOMBER:
-                    return dataProvider.getRecordById(Integer.parseInt(str), Bomber.class).getAnswer();
+                    return dataProvider.getBomberById(Integer.parseInt(str)).getAnswer();
                 case GETAGRICULTURAL:
-                    return dataProvider.getRecordById(Integer.parseInt(str), Agricultural.class).getAnswer();
+                    return dataProvider.getAgriculturalById(Integer.parseInt(str)).getAnswer();
                 case GETFIREAIRCRAFT:
-                    return dataProvider.getRecordById(Integer.parseInt(str), FireAircraft.class).getAnswer();
+                    return dataProvider.getFireAircraftById(Integer.parseInt(str)).getAnswer();
                 case GETFITHER:
-                    return dataProvider.getRecordById(Integer.parseInt(str), Fither.class).getAnswer();
+                    return dataProvider.getFitherById(Integer.parseInt(str)).getAnswer();
                 case GETFREIGHT:
-                    return dataProvider.getRecordById(Integer.parseInt(str), Freight.class).getAnswer();
+                    return dataProvider.getFreightById(Integer.parseInt(str)).getAnswer();
                 case GETPASSENGER:
-                    return dataProvider.getRecordById(Integer.parseInt(str), Passenger.class).getAnswer();
+                    return dataProvider.getPassengerById(Integer.parseInt(str)).getAnswer();
                 case DELFLY:
-                    return dataProvider.delRecordById(Integer.parseInt(str), Fly.class).getAnswer();
+                    return dataProvider.delFlyById(Integer.parseInt(str)).getAnswer();
                 case DELPILOT:
-                    return dataProvider.delRecordById(Integer.parseInt(str), Pilot.class).getAnswer();
+                    return dataProvider.delPilotById(Integer.parseInt(str)).getAnswer();
                 case DELBOMBER:
-                    return dataProvider.delRecordById(Integer.parseInt(str), Bomber.class).getAnswer();
+                    return dataProvider.delBomberById(Integer.parseInt(str)).getAnswer();
                 case DELAGRICULTURAL:
-                    return dataProvider.delRecordById(Integer.parseInt(str), Agricultural.class).getAnswer();
+                    return dataProvider.delAgriculturalById(Integer.parseInt(str)).getAnswer();
                 case DELFIREAIRCRAFT:
-                    return dataProvider.delRecordById(Integer.parseInt(str), FireAircraft.class).getAnswer();
+                    return dataProvider.delFireAircraftById(Integer.parseInt(str)).getAnswer();
                 case DELFITHER:
-                    return dataProvider.delRecordById(Integer.parseInt(str), Fither.class).getAnswer();
+                    return dataProvider.delFitherById(Integer.parseInt(str)).getAnswer();
                 case DELFREIGHT:
-                    return dataProvider.delRecordById(Integer.parseInt(str), Freight.class).getAnswer();
+                    return dataProvider.delFreightById(Integer.parseInt(str)).getAnswer();
                 case DELPASSENGER:
-                    return dataProvider.delRecordById(Integer.parseInt(str), Passenger.class).getAnswer();
+                    return dataProvider.delPassengerById(Integer.parseInt(str)).getAnswer();
                 case UPDFLY:
                     return fly(dataProvider, str, UPD);
                 case UPDPILOT:
@@ -168,19 +173,19 @@ public class Main {
 
         if (valueFly == null) return "";
 
-        fly.setFlyId(Integer.parseInt(valueFly[0]));
-        fly.setAirId(Integer.parseInt(valueFly[1]));
+        fly.setId(Long.parseLong(valueFly[0]));
+        fly.setAirId(Long.parseLong(valueFly[1]));
         fly.setAirType(valueFly[2]);
-        fly.setPilotId(Integer.parseInt(valueFly[3]));
+        fly.setPilotId(Long.parseLong(valueFly[3]));
         fly.setTime(Integer.parseInt(valueFly[4]));
 
         List<Fly> flies = new ArrayList<>();
         flies.add(fly);
 
         if (key == ADD) {
-            return dataProvider.addRecord(flies, Fly.class).getAnswer();
+            return dataProvider.addFly(flies).getAnswer();
         } else {
-            return dataProvider.updRecordById(flies, Integer.parseInt(valueFly[0]), Fly.class).getAnswer();
+            return dataProvider.updFlyById(flies, Long.parseLong(valueFly[0])).getAnswer();
         }
     }
 
@@ -196,7 +201,7 @@ public class Main {
 
         if (valuePilot == null) return "";
 
-        pilot.setPilotId(Integer.parseInt(valuePilot[0]));
+        pilot.setId(Integer.parseInt(valuePilot[0]));
         pilot.setFirstName(valuePilot[1]);
         pilot.setLastName(valuePilot[2]);
         pilot.setTypePilot(valuePilot[3]);
@@ -205,9 +210,9 @@ public class Main {
         List<Pilot> pilots = new ArrayList<>();
         pilots.add(pilot);
         if (key == ADD) {
-            return dataProvider.addRecord(pilots, Pilot.class).getAnswer();
+            return dataProvider.addPilot(pilots).getAnswer();
         } else {
-            return dataProvider.updRecordById(pilots, Integer.parseInt(valuePilot[0]), Pilot.class).getAnswer();
+            return dataProvider.updPilotById(pilots, Long.parseLong(valuePilot[0])).getAnswer();
         }
     }
 
@@ -235,9 +240,9 @@ public class Main {
         list.add(bomber);
 
         if (key == ADD) {
-            return dataProvider.addRecord(list, Bomber.class).getAnswer();
+            return dataProvider.addBomber(list).getAnswer();
         } else {
-            return dataProvider.updRecordById(list, Integer.parseInt(value[0]), Bomber.class).getAnswer();
+            return dataProvider.updBomberById(list, Long.parseLong(value[0])).getAnswer();
         }
     }
 
@@ -265,9 +270,9 @@ public class Main {
         list.add(agricultural);
 
         if (key == ADD) {
-            return dataProvider.addRecord(list, Agricultural.class).getAnswer();
+            return dataProvider.addAgricultural(list).getAnswer();
         } else {
-            return dataProvider.updRecordById(list, Integer.parseInt(value[0]), Agricultural.class).getAnswer();
+            return dataProvider.updAgriculturalById(list, Long.parseLong(value[0])).getAnswer();
         }
     }
 
@@ -295,9 +300,9 @@ public class Main {
         list.add(aircraft);
 
         if (key == ADD) {
-            return dataProvider.addRecord(list, FireAircraft.class).getAnswer();
+            return dataProvider.addFireAircraft(list).getAnswer();
         } else {
-            return dataProvider.updRecordById(list, Integer.parseInt(value[0]), FireAircraft.class).getAnswer();
+            return dataProvider.updFireAircraftById(list, Long.parseLong(value[0])).getAnswer();
         }
     }
 
@@ -326,9 +331,9 @@ public class Main {
         list.add(fither);
 
         if (key == ADD) {
-            return dataProvider.addRecord(list, Fither.class).getAnswer();
+            return dataProvider.addFither(list).getAnswer();
         } else {
-            return dataProvider.updRecordById(list, Integer.parseInt(value[0]), Fither.class).getAnswer();
+            return dataProvider.updFitherById(list, Long.parseLong(value[0])).getAnswer();
         }
     }
 
@@ -355,9 +360,9 @@ public class Main {
         list.add(freight);
 
         if (key == ADD) {
-            return dataProvider.addRecord(list, Freight.class).getAnswer();
+            return dataProvider.addFreight(list).getAnswer();
         } else {
-            return dataProvider.updRecordById(list, Integer.parseInt(value[0]), Freight.class).getAnswer();
+            return dataProvider.updFreightById(list, Long.parseLong(value[0])).getAnswer();
         }
     }
 
@@ -385,9 +390,9 @@ public class Main {
         list.add(passenger);
 
         if (key == ADD) {
-            return dataProvider.addRecord(list, Passenger.class).getAnswer();
+            return dataProvider.addPassenger(list).getAnswer();
         } else {
-            return dataProvider.updRecordById(list, Integer.parseInt(value[0]), Passenger.class).getAnswer();
+            return dataProvider.updPassengerById(list, Long.parseLong(value[0])).getAnswer();
         }
     }
 

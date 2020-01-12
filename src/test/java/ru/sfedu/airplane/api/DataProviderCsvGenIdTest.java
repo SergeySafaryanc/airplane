@@ -9,6 +9,8 @@ import ru.sfedu.airplane.models.constants.Outcomes;
 
 import java.util.*;
 
+import static ru.sfedu.airplane.models.constants.Outcomes.*;
+
 public class DataProviderCsvGenIdTest {
 
     DataProviderCsv csv = new DataProviderCsv();
@@ -24,7 +26,7 @@ public class DataProviderCsvGenIdTest {
 //        Bomber
         for (Object i: generate()) {
             Bomber bomber = new Bomber();
-            bomber.setId(Integer.parseInt(i.toString()));
+            bomber.setId(Long.parseLong(i.toString()));
             bomber.setModel("TEST");
             bomber.setProducer("TEST");
             bomber.setMaxDistance(1000);
@@ -33,7 +35,8 @@ public class DataProviderCsvGenIdTest {
             bomber.setTypeBombs("TEST");
             List<Bomber> bombers = new ArrayList<>();
             bombers.add(bomber);
-            Assert.assertEquals(csv.addRecord(bombers, Bomber.class).getStatus(), Outcomes.COMPLETE);
+            System.out.println(bombers.toString());
+            Assert.assertEquals(csv.addRecord(bombers, Bomber.class).getStatus(), COMPLETE);
         }
 //        Fither
         for (Object i: generate()) {
@@ -48,7 +51,7 @@ public class DataProviderCsvGenIdTest {
             fither.setGeneration(4);
             List<Fither> fithers = new ArrayList<>();
             fithers.add(fither);
-            Assert.assertEquals(csv.addRecord(fithers, Fither.class).getStatus(), Outcomes.COMPLETE);
+            Assert.assertEquals(csv.addRecord(fithers, Fither.class).getStatus(), COMPLETE);
         }
 //        Agricultural
         for (Object i: generate()) {
@@ -62,7 +65,7 @@ public class DataProviderCsvGenIdTest {
             agricultural.setDisplacement(10);
             List<Agricultural> agriculturals = new ArrayList<>();
             agriculturals.add(agricultural);
-            Assert.assertEquals(csv.addRecord(agriculturals, Agricultural.class).getStatus(), Outcomes.COMPLETE);
+            Assert.assertEquals(csv.addRecord(agriculturals, Agricultural.class).getStatus(), COMPLETE);
         }
 //        FireAircraft
         for (Object i: generate()) {
@@ -76,7 +79,7 @@ public class DataProviderCsvGenIdTest {
             aircraft.setDisplacement(100);
             List<FireAircraft> fireAircrafts = new ArrayList<>();
             fireAircrafts.add(aircraft);
-            Assert.assertEquals(csv.addRecord(fireAircrafts, FireAircraft.class).getStatus(), Outcomes.COMPLETE);
+            Assert.assertEquals(csv.addRecord(fireAircrafts, FireAircraft.class).getStatus(), COMPLETE);
         }
 //        Freight
         for (Object i: generate()) {
@@ -89,7 +92,7 @@ public class DataProviderCsvGenIdTest {
             freight.setMaxWeight(100);
             List<Freight> freights = new ArrayList<>();
             freights.add(freight);
-            Assert.assertEquals(csv.addRecord(freights, Freight.class).getStatus(), Outcomes.COMPLETE);
+            Assert.assertEquals(csv.addRecord(freights, Freight.class).getStatus(), COMPLETE);
         }
 //        Passenger
         for (Object i: generate()) {
@@ -103,7 +106,7 @@ public class DataProviderCsvGenIdTest {
             passenger.setService("TEST");
             List<Passenger> freights = new ArrayList<>();
             freights.add(passenger);
-            Assert.assertEquals(csv.addRecord(freights, Passenger.class).getStatus(), Outcomes.COMPLETE);
+            Assert.assertEquals(csv.addRecord(freights, Passenger.class).getStatus(), COMPLETE);
         }
     }
 
@@ -113,42 +116,42 @@ public class DataProviderCsvGenIdTest {
         List<Bomber> bombers = csv.read(Bomber.class);
         bombers.forEach(bomber -> {
             if (bomber.getModel().equals("TEST")) {
-                Assert.assertEquals(csv.getRecordById(bomber.getId(), Bomber.class).getStatus(), Outcomes.COMPLETE);
+                Assert.assertEquals(csv.getRecordById(bomber.getId(), Bomber.class).getStatus(), COMPLETE);
             }
         });
 //        Fither
         List<Fither> fithers = csv.read(Fither.class);
         fithers.forEach(fither -> {
             if (fither.getModel().equals("TEST")) {
-                Assert.assertEquals(csv.getRecordById(fither.getId(), Fither.class).getStatus(), Outcomes.COMPLETE);
+                Assert.assertEquals(csv.getRecordById(fither.getId(), Fither.class).getStatus(), COMPLETE);
             }
         });
 //        Agricultural
         List<Agricultural> agriculturals = csv.read(Agricultural.class);
         agriculturals.forEach(agricultural -> {
             if (agricultural.getModel().equals("TEST")) {
-                Assert.assertEquals(csv.getRecordById(agricultural.getId(), Agricultural.class).getStatus(), Outcomes.COMPLETE);
+                Assert.assertEquals(csv.getRecordById(agricultural.getId(), Agricultural.class).getStatus(), COMPLETE);
             }
         });
 //        FireAircraft
         List<FireAircraft> fireAircrafts = csv.read(FireAircraft.class);
         fireAircrafts.forEach(fireAircraft -> {
             if (fireAircraft.getModel().equals("TEST")) {
-                Assert.assertEquals(csv.getRecordById(fireAircraft.getId(), FireAircraft.class).getStatus(), Outcomes.COMPLETE);
+                Assert.assertEquals(csv.getRecordById(fireAircraft.getId(), FireAircraft.class).getStatus(), COMPLETE);
             }
         });
 //        Freight
         List<Freight> freights = csv.read(Freight.class);
         freights.forEach(freight -> {
             if (freight.getModel().equals("TEST")) {
-                Assert.assertEquals(csv.getRecordById(freight.getId(), Freight.class).getStatus(), Outcomes.COMPLETE);
+                Assert.assertEquals(csv.getRecordById(freight.getId(), Freight.class).getStatus(), COMPLETE);
             }
         });
 //        Passenger
         List<Passenger> passengers = csv.read(Passenger.class);
         passengers.forEach(passenger -> {
             if (passenger.getModel().equals("TEST")) {
-                Assert.assertEquals(csv.getRecordById(passenger.getId(), Passenger.class).getStatus(), Outcomes.COMPLETE);
+                Assert.assertEquals(csv.getRecordById(passenger.getId(), Passenger.class).getStatus(), COMPLETE);
             }
         });
     }
@@ -159,42 +162,42 @@ public class DataProviderCsvGenIdTest {
         List<Bomber> bombers = csv.read(Bomber.class);
         bombers.forEach(bomber -> {
             if (bomber.getModel().equals("TEST")) {
-                Assert.assertEquals(csv.delRecordById(bomber.getId(), Bomber.class).getStatus(), Outcomes.COMPLETE);
+                Assert.assertEquals(csv.delRecordById(bomber.getId(), Bomber.class).getStatus(), COMPLETE);
             }
         });
 //        Fither
         List<Fither> fithers = csv.read(Fither.class);
         fithers.forEach(fither -> {
             if (fither.getModel().equals("TEST")) {
-                Assert.assertEquals(csv.delRecordById(fither.getId(), Fither.class).getStatus(), Outcomes.COMPLETE);
+                Assert.assertEquals(csv.delRecordById(fither.getId(), Fither.class).getStatus(), COMPLETE);
             }
         });
 //        Agricultural
         List<Agricultural> agriculturals = csv.read(Agricultural.class);
         agriculturals.forEach(agricultural -> {
             if (agricultural.getModel().equals("TEST")) {
-                Assert.assertEquals(csv.delRecordById(agricultural.getId(), Agricultural.class).getStatus(), Outcomes.COMPLETE);
+                Assert.assertEquals(csv.delRecordById(agricultural.getId(), Agricultural.class).getStatus(), COMPLETE);
             }
         });
 //        FireAircraft
         List<FireAircraft> fireAircrafts = csv.read(FireAircraft.class);
         fireAircrafts.forEach(fireAircraft -> {
             if (fireAircraft.getModel().equals("TEST")) {
-                Assert.assertEquals(csv.delRecordById(fireAircraft.getId(), FireAircraft.class).getStatus(), Outcomes.COMPLETE);
+                Assert.assertEquals(csv.delRecordById(fireAircraft.getId(), FireAircraft.class).getStatus(), COMPLETE);
             }
         });
 //        Freight
         List<Freight> freights = csv.read(Freight.class);
         freights.forEach(freight -> {
             if (freight.getModel().equals("TEST")) {
-                Assert.assertEquals(csv.delRecordById(freight.getId(), Freight.class).getStatus(), Outcomes.COMPLETE);
+                Assert.assertEquals(csv.delRecordById(freight.getId(), Freight.class).getStatus(), COMPLETE);
             }
         });
 //        Passenger
         List<Passenger> passengers = csv.read(Passenger.class);
         passengers.forEach(passenger -> {
             if (passenger.getModel().equals("TEST")) {
-                Assert.assertEquals(csv.delRecordById(passenger.getId(), Passenger.class).getStatus(), Outcomes.COMPLETE);
+                Assert.assertEquals(csv.delRecordById(passenger.getId(), Passenger.class).getStatus(), COMPLETE);
             }
         });
     }

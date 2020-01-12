@@ -9,7 +9,7 @@ import org.simpleframework.xml.Root;
 public class Airplane {
 
 	@CsvBindByPosition(position = 0)
-	public int id;
+	public long id;
 	@CsvBindByPosition(position = 1)
 	public String model;
 	@CsvBindByPosition(position = 2)
@@ -23,7 +23,7 @@ public class Airplane {
  * @param newVar the new value of id
  */
 	@Element(name = "Id")
-	public void setId (int newVar) {
+	public void setId (long newVar) {
 	id = newVar;
 	}
 
@@ -32,7 +32,7 @@ public class Airplane {
  * @return the value of id
  */
 	@Element(name = "Id")
-	public int getId () {
+	public long getId () {
 	return id;
 	}
 
